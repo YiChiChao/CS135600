@@ -19,7 +19,7 @@ int main(){
         tmp = 0;
         for(long long int i = 0; i < q; ++i){
             int a, b;
-            scanf("%d %d", &a, &b);
+            scanf("%lld %lld", &a, &b);
             //to determine different scenerio of a and b turnsout different consequence
             if(a > b) try = arr[n-1]-(arr[a-2] - arr[b-1]);
             else if(a < b) try = arr[b-1]-arr[a-2];
