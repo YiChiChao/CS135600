@@ -14,6 +14,8 @@ void insert(Node **head, char *color, int index){
     //2.if over the index, add a new space in the end and the next pointer is NULL
     //3.put the color into the space
     Node *now = *head;
+    //1. since the for loop cannot deal with index=0
+    //2. when index>0 but there is nothing in the dest
     if(index == 0 || now->next == NULL){
         Node* tmp = (Node*)malloc(sizeof(Node));
         strcpy(tmp->color, color);
@@ -21,17 +23,13 @@ void insert(Node **head, char *color, int index){
         now->next = tmp;
         return;
     }
-    //to deal eith the index 1, start from the first color index
+    //to deal with the index 1, start from the first color index
     now = now->next;
     for(int i = 1; i < (index); ++i){
-        if(now == NULL) break;
-        if(now->next == NULL){
-            //printf("!\n");
-            break;
-        }
+        //when the index is over the dest length, break
+        if(now->next == NULL) break;
         else now = now->next;
     }
-    //
     if(color != NULL){
         Node* tmp = (Node*)malloc(sizeof(Node));
         strcpy(tmp->color, color);
@@ -43,8 +41,11 @@ void insert(Node **head, char *color, int index){
 void erase1(Node**head, int index){
     Node* now = *head;
     Node* tmp;
+    //nothing to erase
     if(now->next == NULL)return;
     for(int i = 1; i < index; ++i){
+        //when the index is over the dest length, break
+        //now has to stop at the prev position
         if(now->next->next == NULL)break;
         now = now->next;
     }
@@ -79,19 +80,24 @@ void reverse(Node**head, int a, int b){
         now = now->next;
         prev = prev->next;  
     }
-    
+    //to remember the head before the reverse part
     Node* first = prev;
+    //start from the second node in the reverse part
     now = now->next;
     prev = prev->next;
     for(int i = a+1; i <= b; ++i){
         next = now->next;
+        //switch the next pointer direction to the front
         now->next = prev;
         prev = now;
         now = next;
+        //if b is bigger than the dest length
         if(now == NULL)break;  
     }
-    //printf("last: %s\n", now->color);
+    //remember the tail after the reverse part
     Node* last = now;
+    //connect the head with the reverse new head
+    //connect the reverse new tail to the tail
     first->next->next = last;
     first->next = prev;
 
