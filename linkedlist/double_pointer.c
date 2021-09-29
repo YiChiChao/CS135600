@@ -34,6 +34,31 @@ void insert_increase_list(Node **head, int data){
     }
 }
 
+void delete_node(Node **head, int index){
+    Node *delete_node;
+    if(*head == NULL) return;
+    else if(index == 1){
+        delete_node = *head;
+        *head = (*head)->next;
+        free(delete_node);
+        return;
+    }
+
+    Node *cur = *head;
+    while(cur->next != NULL){
+        if(index > 2){//we want the cur node to stop at the front 
+            cur = cur->next;
+            index--;
+        }
+        else break;
+    }
+    delete_node = cur->next;
+    cur->next = delete_node->next;
+    free(delete_node);   
+}
+
+
+
 void print_list(Node *head){
     while(head != NULL){
         printf("%d\n", head->value);
@@ -51,6 +76,7 @@ int main(){
     insert_increase_list(&head, 5);
     print_list(head);
     insert_increase_list(&head, 4);
+    delete_node(&head, 3);
     print_list(head);
     return 0;
 }
