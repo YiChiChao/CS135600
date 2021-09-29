@@ -22,19 +22,15 @@ void insert(Node **prev, int data){
 
 void insert_increase_list(Node **head, int data){
     Node *prev = *head;
-    if(*head == NULL){
-        insert_front(head, data);
-    }
-    else if(data < (*head)->value){
+    if(*head == NULL || data < prev->value){
         insert_front(head, data);
     }
     else{
-        while(data > prev->next->value){
-            prev = prev->next;
+        while(prev->next != NULL ){//if we write "if(data > prev->next->value" in the while loop, when confront NULL if will occur segment fault 
+            if(data > prev->next->value) prev = prev->next;
+            else break;
         }
-        printf("prev = %d\n", prev->value);
         insert(&prev, data);
-        printf("now = %d\n", prev->next->value);
     }
 }
 
@@ -45,7 +41,6 @@ void print_list(Node *head){
     }
     printf("FINISHED!!\n");
 }
-
 int main(){
     Node *head = NULL;
     insert_increase_list(&head, 2);
