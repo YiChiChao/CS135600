@@ -34,6 +34,29 @@ void insert_increase_list(Node **head, int data){
     }
 }
 
+void insert_increase_list_pointer2pointer(Node **head, int data){
+    Node **pp = head;
+    Node *entry = *head;
+    if(entry == NULL){
+        *pp = malloc(sizeof(Node));
+        (*pp)->value = data;
+        (*pp)->next = NULL;
+        return;
+    }
+    while(entry){
+        if(entry->value > data){
+            Node *new = malloc(sizeof(Node));
+            new->value = data;
+            new->next = *pp;
+            *pp = new;
+            return;
+        }
+        pp = &entry->next;//to get the pointer of the next pointer, which we don't have to have a prev pointer to get the cur pointer address
+        entry = entry->next;
+    }
+}
+
+
 void delete_node(Node **head, int index){
     Node *delete_node;
     if(*head == NULL) return;
@@ -77,6 +100,7 @@ int main(){
     print_list(head);
     insert_increase_list(&head, 4);
     delete_node(&head, 3);
+    insert_increase_list_pointer2pointer(&head, 3);
     print_list(head);
     return 0;
 }
