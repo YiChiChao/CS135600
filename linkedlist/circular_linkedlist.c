@@ -117,6 +117,6 @@ int main(){
     //init
     Head head = {NULL, NULL};
     List *newnode = NULL;
-
+    
     return 0;
 }
