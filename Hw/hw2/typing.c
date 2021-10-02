@@ -11,6 +11,13 @@ typedef struct _NODE{
 #define next ptr_to_next_node 
 #define prev ptr_to_prev_node
 
+int n;
+char buf[100];
+Node* cursor;
+char intype;
+int num;
+Node *head;
+Node *tail; 
 
 
 void insert(Node **cur, char c){
@@ -82,13 +89,7 @@ void show()
     printf("\n");
 }
 
-int n;
-char buf[100];
-Node* cursor;
-char intype;
-int num;
-Node *head;
-Node *tail; 
+
 
 int main()
 {
