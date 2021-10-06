@@ -8,7 +8,7 @@ typedef struct _NODE
     struct _NODE *next;
 } Node;
 
-void insert(Node **head, char *color, int index){
+/*void insert(Node **head, char *color, int index){
     //1.move the space to the correct place
     //2.if the index is not over the index, 
     //2.if over the index, add a new space in the end and the next pointer is NULL
@@ -36,6 +36,22 @@ void insert(Node **head, char *color, int index){
         tmp->next = now->next;
         now->next = tmp;
     }   
+}*/
+
+void insert(Node **head, char *color, int index){
+    Node *nownode = *head;
+    if(!(index == 0 || nownode->next == NULL)){
+        nownode = nownode->next;
+        for(int i = 1; i < index; ++i){
+            if(nownode->next == NULL)break;
+            else nownode = nownode->next;
+        }
+    }
+    Node *addnode = malloc(sizeof(Node));
+    strcpy(addnode, color);
+    addnode->next = nownode->next;
+    nownode->next = addnode;
+    return;
 }
 
 void erase1(Node**head, int index){
