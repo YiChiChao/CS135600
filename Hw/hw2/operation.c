@@ -23,14 +23,13 @@ void insert(Node **head, int val1, int val2){
 
 void erase(Node **head, int val){
     Node *nownode = (*head)->next;
-    while(--val){
+    while(val--){
         Node* delete = nownode;
         nownode = nownode->next;
         free(delete);
     }
-    (*head)->next = nownode->next;
-    nownode->next->prev = *head;
-    free(nownode);
+    (*head)->next = nownode;
+    nownode->prev = *head;
 }
 
 void move(Node **head, int val){
