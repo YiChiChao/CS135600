@@ -8,34 +8,32 @@ typedef struct _NODE {
     struct _NODE *left_child, *right_child;
 } Node;
 
-Node *createnode(int value){
-    Node *newnode = malloc(sizeof(Node));
-    newnode->level = value;
-    newnode->right = NULL;
-    newnode->left = NULL;
-    return newnode;
-}
 
-void insertnumber(Node **rootptr, int value){
-    Node *root = *rootptr;
-    if(root == NULL){
-        (*rootptr) = createnode(value);
-        return;
-    }
-    if(value <= root->level){
-        return insertnumber(&(root->left), value);
-    }else{
-        return insertnumber(&(root->right), value);
-    }
 
-}
+/*void print_tree(Node *root){
+    if(root == NULL)return;
+    printf("%d ", root->level);
+    print_tree(root->left);
+    printf("// ");
+    print_tree(root->right);
+}*/
+
+
+
 
 void build_tree(Node **now, int *arr, int l, int r){
     if(l > r)return;
     int mid = (l + r)/2;
-    insertnumber(now, arr[mid]);
-    build_tree(now, arr, l, mid-1);
-    build_tree(now, arr, mid+1, r);
+    (*now) = (Node*)malloc(sizeof(Node));
+    if(l == r){
+        (*now)->level = arr[mid];
+        (*now)->left = (*now)->right = NULL;
+    }else{
+        (*now)->level = arr[mid];
+        build_tree(&((*now)->left), arr, l, mid-1);
+        build_tree(&((*now)->right), arr, mid+1, r);
+    }
+    
 }
 int query_heatstroke(Node *now, int x){
     if(now == NULL)return 0;
@@ -46,25 +44,47 @@ int query_heatstroke(Node *now, int x){
         return query_heatstroke(now->right, x);
     }
 }
-void eat_rat(Node **root, int x){
-    Node *pre = NULL;
+void eat_rat(Node **root, int x){//delete node
     Node *now = *root;
-    Node * delete;
-    int flag = 0;
-    if(now == NULL)return;
-    while(now->level != x){
-        pre = now;
-        if(now->level > x){
-            now = now->left;
-            flag = 0;
-        }else {
-            now = now->right;
-            flag = 1;
-        }
+    if(now == NULL){
+        return;
     }
-    
-    if(now->right == NULL){
-        delete = now;
+    //if x  > now root
+    //then it lies in left subtree
+    if(x > now->level){
+        eat_rat(&now->right, x);
+    }
+    //if x < now root
+    //then if lies in right subtree
+    else if( x < now->level){
+        eat_rat(&now->left, x);
+    }
+    // if key is same as now root
+    //do the deletion
+    else{
+        //node with only one child or no child
+        if(now->left == NULL){
+            *root = now->right;
+            free(now);
+            return;
+        }else if (now->right == NULL){
+            *root = now->left;
+            free(now);
+            return;
+        }
+        //node with two children
+        //get the inorder successor
+        //min of the right subtree
+        Node *min = now->right;
+        while(min->left != NULL){
+            min = min->left;
+        }
+        (*root)->level = min->level;
+        //printf("root = %d\n", (*root)->level);
+        eat_rat(&now->right, min->level);
+    }
+}
+        /*delete = now;
         if(flag)pre->right = now->left;
         else pre->left = now->left;
     }else if(now->left == NULL){
@@ -81,15 +101,8 @@ void eat_rat(Node **root, int x){
         now->left = now->left->right;
     }
     free(delete);
-}
-
-/*void print_tree(Node *root){
-    if(root == NULL)return;
-    printf("%d ", root->level);
-    print_tree(root->left);
-    printf("// ");
-    print_tree(root->right);
 }*/
+
 
 int main(){
     int *arr;
