@@ -10,10 +10,10 @@ luck: luck_binarysearch.c
 area: area_pretoin.c
 	$(CC) $(CFLAGS) $^ -o $@
 
-rat: binary_search_tree.c
+rat: rat_binarysearchtree.c
 	$(CC) $(CFLAGS) $^ -o $@
 
-binary: binary_search_tree.c
+binary: binarysearchtree.c
 	$(CC) $(CFLAGS) $^ -o $@
 
 do1:

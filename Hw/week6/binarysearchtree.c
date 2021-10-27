@@ -61,11 +61,12 @@ void eat_rat(Node **root, int x){//delete node
     }
     //node with only one child or no child
     else{
+        Node *tmp = *now;
         if((*now)->left == NULL) 
             now = &((*now)->right);
         else if ((*now)->right == NULL)
             now = &((*now)->left);
-        free(*now);
+        free(tmp);
     }
     
     
