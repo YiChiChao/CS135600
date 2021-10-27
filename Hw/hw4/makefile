@@ -6,7 +6,7 @@ all:$(OBJECTS)
 construct: construct_tree.c
 	$(CC) $(CFLAGS) $^ -o $@
 
-knuckles: knuckle.c
+knuckles: knuckle_string.c
 	$(CC) $(CFLAGS) $^ -o $@
 
 test: test.c
