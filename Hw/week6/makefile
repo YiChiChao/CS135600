@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -g -Wall
-OBJECTS = luck area rat
+OBJECTS = luck area rat binary
 
 all: $(OBJECTS)
 
@@ -13,6 +13,9 @@ area: area_pretoin.c
 rat: binary_search_tree.c
 	$(CC) $(CFLAGS) $^ -o $@
 
+binary: binary_search_tree.c
+	$(CC) $(CFLAGS) $^ -o $@
+
 do1:
 	./luck
 
@@ -21,6 +24,9 @@ do2:
 
 do3:
 	./rat<testcase3
+
+do4: 
+	./binary<testcase3
 
 clean:
 	rm $(OBJECTS)

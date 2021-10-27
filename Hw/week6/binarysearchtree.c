@@ -7,9 +7,6 @@ typedef struct _NODE {
     int level;
     struct _NODE *left_child, *right_child;
 } Node;
-
-
-
 /*void print_tree(Node *root){
     if(root == NULL)return;
     printf("%d ", root->level);
@@ -17,7 +14,6 @@ typedef struct _NODE {
     printf("// ");
     print_tree(root->right);
 }*/
-
 
 void build_tree(Node **now, int *arr, int l, int r){
     if(l > r)return;
@@ -43,45 +39,36 @@ int query_heatstroke(Node *now, int x){
         return query_heatstroke(now->right, x);
     }
 }
+
+
 void eat_rat(Node **root, int x){//delete node
-    Node *now = *root;
-    if(now == NULL){
+    Node **now = root;
+    if((*now) == NULL){
         return;
     }
-    //if x  > now root
-    //then it lies in left subtree
-    if(x > now->level){
-        eat_rat(&now->right, x);
+    while((*now) ->level != x){
+        if(x > (*now) ->level) now = &((*now)->right);
+        else now = &((*now)->left);
     }
-    //if x < now root
-    //then if lies in right subtree
-    else if( x < now->level){
-        eat_rat(&now->left, x);
-    }
-    // if key is same as now root
     //do the deletion
-    else{
-        //node with only one child or no child
-        if(now->left == NULL){
-            *root = now->right;
-            free(now);
-            return;
-        }else if (now->right == NULL){
-            *root = now->left;
-            free(now);
-            return;
-        }
-        //node with two children
-        //get the inorder successor
-        //min of the right subtree
-        Node *min = now->right;
-        while(min->left != NULL){
-            min = min->left;
-        }
-        (*root)->level = min->level;
-        //printf("root = %d\n", (*root)->level);
-        eat_rat(&now->right, min->level);
+    //node with two children
+    if((*now)->right != NULL && (*now)->left != NULL){
+        Node *big = (*now)->right;
+        while(big->left != NULL) big = big->left;//get the max num in the right subtree
+        (*now)->level = big->level;
+        eat_rat(&((*now)->right), big->level);//do the same recursion in the subtree to delete the big node
+
     }
+    //node with only one child or no child
+    else{
+        if((*now)->left == NULL) 
+            now = &((*now)->right);
+        else if ((*now)->right == NULL)
+            now = &((*now)->left);
+        free(*now);
+    }
+    
+    
 }
         /*delete = now;
         if(flag)pre->right = now->left;
