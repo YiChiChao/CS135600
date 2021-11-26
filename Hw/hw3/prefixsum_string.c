@@ -1,41 +1,35 @@
 #include <stdio.h>
 #include <string.h>
-char s[1005] = {0};
-char p[1005] = {0};
+#define Max(x, y) ((x > y) ? (x) : (y))
+
+
+char S[1001], P[1001];
+int s_length, p_length;
+int q;
+int check(int index){
+    for(int i = 0; i < p_length; ++i){
+        if(S[index +i] != P[i])return 0;
+    }
+    return 1;
+}
 
 int main(){
-    int q;
-    while(scanf("%s %s", s, p) != EOF){
-        int sum[1005]={0};
-        int count = 0;
-        int p_length = strlen(p);
-        int s_length = strlen(s);
-        int index = 1;
-        int max = 0;
-        while(index <= s_length){
-            if(strncmp(s+(index-1), p, p_length) == 0){
-                sum[index++] = ++count;
-            }
-            else {
-                sum[index] = count;
-                index++;
-            }
-        }
+    while(~scanf("%s %s", S, P)){
+        int ans = -1;
+        int prefix[1787] = {0};
+        s_length = strlen(S);
+        p_length = strlen(P);
         scanf("%d", &q);
-        for(int i = 0; i < q;++i){
-            int start, end;
-            scanf("%d %d", &start, &end);
-            int num = end - p_length + 1;
-            int tmp;
-            //since num might be less than 0, which means both index won't have any string
-            if(num < 0) tmp = 0;
-            else tmp = sum[end - p_length + 1]-sum[start - 1];
-            if(tmp > max){
-                max = tmp;
-            }
+        for(int i = 0; i < s_length - p_length + 1; ++i){
+            prefix[i+1] = check(i) + prefix[i];
         }
-        printf("%d\n", max);
+        while(q--){
+            int l, r;
+            scanf("%d %d", &l, &r);
+            int start = l-1, end = r - p_length + 1;
+            int temp = (end <= start) ? 0 : prefix[end] - prefix[start];
+            ans = Max(temp, ans);
+        }
+        printf("%d\n", ans);
     }
-    
-    return 0;
 }

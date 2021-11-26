@@ -7,9 +7,9 @@ ll int fast_power(ll int x, ll int y, ll int m){
         return 1%m;
     }
     ll int former = fast_power(x, y/2, m);
-    result =((former%m)*(former%m))%m;
-    if(y%2 == 1){
-        result *= x%m;
+    result =((former % m)*(former % m)) % m;
+    if(y % 2 == 1){
+        result *= x % m;
     }
     return result%m;
     

@@ -47,10 +47,10 @@ void backspace(Node **cur){
 
 void deletion(Node **cur){
     if((*cur)->next == tail) return;
-   Node *delete = (*cur)->next;
-   (*cur)->next = delete->next;
-   delete->next->prev = *cur;
-   free(delete);
+    Node *delete = (*cur)->next;
+    (*cur)->next = delete->next;
+    delete->next->prev = *cur;
+    free(delete);
 }
 void go_left(Node **cur, int t){
     Node *now = *cur;

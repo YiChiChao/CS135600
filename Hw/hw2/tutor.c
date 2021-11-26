@@ -7,79 +7,46 @@ typedef struct _Node{
 }Node;
 
 Node *createList(int n){
-    //create list in the reverse order
-    //the node will stop at the head
-    Node *np = (Node*)malloc(sizeof(Node));
-    np->number = n;
-    np->next = np;
-    Node *nownode = np; 
-    while(--n){
-        Node *addnode = malloc(sizeof(Node));
-        addnode->number = n;
-        addnode->next = nownode;
-        nownode = addnode; 
+    Node *head = malloc(sizeof(Node));
+    Node *cur = head;
+    head->number = 1;
+    head->next = head;
+    for(int i = 2; i <= n; ++i){
+        Node *newnode = malloc(sizeof(Node));
+        newnode->number = i;
+        newnode->next = head;
+        cur->next = newnode;
+        cur = newnode;
     }
-    np->next = nownode;
-    return nownode;
+    return head;
 }
 
-void freeList(Node* head){
-    
+void freeList(Node *head){
+    while(head->next != head){
+        Node *delete = head->next;
+        head->next = head->next->next;
+        free(delete);
+    }
+    free(head);
 }
 
 int solveJosephus(Node **head, int step){
-    Node* nownode = *head;
     int length = 1;
-    while(nownode->next != *head){
-        ++length;
-        nownode = nownode->next;
+    Node *count = (*head)->next;
+    while(count != *head){
+        length++;
+        count = count->next;
     }
-    //printf("length = %d\n", length);
-    while(nownode->next != nownode){
-        int mod_step = step % length;
-        if(mod_step == 0){
-            for(int i = 0; i< length-1; ++i){
-                nownode = nownode->next;
-            }
-            Node *delete = nownode->next;
-            nownode->next = delete->next;
-            free(delete);    
+    while(*head != (*head)->next){
+        int k = (step % length -2 + length) % length;//-1 for count in the start point, -1 for stop on the target->prev
+        for(int i = 0; i < k; ++i){
+            *head = (*head)->next;
         }
-        else{
-            for(int i = 0; i < (mod_step-1);++i){
-            nownode = nownode->next;
-            }
-            //printf("%d\n", nownode->number);
-            Node* delete = nownode->next;
-            nownode->next = delete->next;
-            free(delete);
-        }
-        
-        //printf("%d\n", nownode->number);
-        //printf("%d\n", nownode->next->number);
-        --length;
+        Node* tmp = (*head)->next;
+        (*head)->next = (*head)->next->next;
+        free(tmp);
+        *head = (*head)->next;
+        length--;
     }
-    
-    return nownode->number;
-}
-void print(Node *head){
-    Node* nownode = head;
-    while(nownode->next != head){
-        printf("%d ", nownode->number);
-        nownode = nownode->next;
-    }
-    printf("%d\n", nownode->number);
-}
-
-int main()
-{
-    int n, k;
-    while( scanf("%d%d", &n, &k)!=EOF )
-    {
-        Node *head;
-        head = createList(n);
-        printf( "%d\n", solveJosephus(&head, k) );
-        freeList(head);
-    }
-    return 0;
+    return (*head)->number;
 }

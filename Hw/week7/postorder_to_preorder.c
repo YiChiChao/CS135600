@@ -36,7 +36,10 @@ Node* construct_tree(int postorder[], int inorder[], int inorder_start, int inor
     if(inorder_start == inorder_end){
         return treenode;
     }
+    
     int index = search_inorder_idx(inorder, treenode->value, inorder_start, inorder_end);
+    //since postorder has the order root->right->left from the back
+    //so we should first get the right node
     treenode->right = construct_tree(postorder, inorder, index+1, inorder_end, n);
     treenode->left = construct_tree(postorder, inorder, inorder_start, index-1, n);
     return treenode;

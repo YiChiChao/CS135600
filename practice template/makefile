@@ -1,14 +1,14 @@
 CC = gcc
 CFLAGS = -g -Wall
-OBJECTS = matrix
+OBJECTS = practice
 
 all: $(OBJECTS)
 
-matrix: practice_matrixmult.c
+practice: practice.c
 	$(CC) $(CFLAGS) $^ -o $@
 
-do1:
-	./matrix
+do:
+	./practice
 
 
 clean:

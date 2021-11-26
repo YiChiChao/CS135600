@@ -87,36 +87,18 @@ void erase2(Node**head, char* color){
 }
 
 void reverse(Node**head, int a, int b){
-    //directly change the pointer direction
-    Node* now = (*head)->next;
-    Node* prev = *head;
-    Node* next;
-    for(int i = 1; i < a; ++i){
-        if(now->next == NULL) return;
-        now = now->next;
-        prev = prev->next;  
+    Node *nownode = *head;
+    Node *tmp;
+    Node *first;
+    int i;
+    for(i = 0; i != a; first = nownode, nownode = nownode->next, ++i);
+    while(i < b && nownode->next != NULL){
+        tmp = nownode->next;
+        nownode->next = tmp->next;
+        tmp->next = first->next;//since nownode would not be changes, we should use first->next
+        first->next = tmp;
+        ++i;
     }
-    //to remember the head before the reverse part
-    Node* first = prev;
-    //start from the second node in the reverse part
-    now = now->next;
-    prev = prev->next;
-    for(int i = a+1; i <= b; ++i){
-        next = now->next;
-        //switch the next pointer direction to the front
-        now->next = prev;
-        prev = now;
-        now = next;
-        //if b is bigger than the dest length
-        if(now == NULL)break;  
-    }
-    //remember the tail after the reverse part
-    Node* last = now;
-    //connect the head with the reverse new head
-    //connect the reverse new tail to the tail
-    first->next->next = last;
-    first->next = prev;
-
 }
 
 void show(Node **head) {
