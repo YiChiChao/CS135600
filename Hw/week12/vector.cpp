@@ -66,7 +66,7 @@ int main(){
             }
         }else if(buffer == "find"){
             cin >> num;
-            if(num >= index || num <= 0)continue;
+            if(num > index || num <= 0)continue;
             cout << arr[num-1] << endl;
         }else if(buffer == "min"){
             if(index == 0)continue;

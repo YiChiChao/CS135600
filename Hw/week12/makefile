@@ -5,7 +5,7 @@ CXXFLAGS = -Wall -g -std=c++11
 OBJECTS = vector salary cat lyrics
 
 all: $(OBJECTS)
-vector: vector.cpp
+vector: vector2.cpp
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
 salary: salary.cpp
@@ -18,7 +18,7 @@ lyrics: lyrics.cpp
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
 do1:
-	./vector
+	./vector < testcase1
 
 do2:
 	./salary < testcase2

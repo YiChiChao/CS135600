@@ -1,0 +1,18 @@
+17
+max
+find 5
+min
+pop_back
+push_back 99
+push_back 99
+push_back 30
+push_back 30
+min
+max
+push_back 6
+find 2
+pop_back
+min
+push_back 100
+max
+find 4
