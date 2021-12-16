@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -g -Wall
 CXX = g++
 CXXFLAGS = -Wall -g -std=c++11
-OBJECTS = vector salary cat lyrics
+OBJECTS = vector salary cat lyrics bonus
 
 all: $(OBJECTS)
 vector: vector2.cpp
@@ -17,6 +17,9 @@ cat: cat.c
 lyrics: lyrics.cpp
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
+bonus: bonus.c
+	$(CC) $(CFLAGS) $^ -o $@
+
 do1:
 	./vector < testcase1
 
@@ -27,6 +30,8 @@ do3:
 	./cat < testcase3
 do4:
 	./lyrics < testcase4
+do5:
+	./bonus < testcase5
 
 clean: 
 	rm $(OBJECTS)

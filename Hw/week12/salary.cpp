@@ -13,7 +13,7 @@ int main(){
         cin >> str;
         long long count = str.length();
         for(int i = 1; i <= n; ++i){
-            int times = atoi((str.substr(i-1, 1)).c_str());
+            int times = stoi((str.substr(i-1, 1)));
             count = ((((count-i)*(times-1))%MOD + count)%MOD + MOD)%MOD;
             if(str.length() < n && times-1 >= 1){
                 string sub = str.substr(i, str.length()-i);

@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
-#include <algorithm>
 #include <iomanip>
 #define max 100000
 using namespace std;
@@ -32,12 +31,9 @@ istream& operator>>(istream & in,  BigInt & b) {
     std::reverse(ch.begin(), ch.end());
     int id = 0;
     for(int i = 0; i < ch.length(); i += 5){
-        string sub = ch.substr(0+id*5, 5);
+        string sub = ch.substr(i, 5);
         std::reverse(sub.begin(), sub.end());
-        b.m[id++] = atoi(sub.c_str());
-    }
-    for(int i = id; i < 1000; i++){
-        b.m[i] = 0;
+        b.m[id++] = stoi(sub);
     }
     b.l = id;
     return in;
@@ -48,66 +44,92 @@ ostream& operator<<(ostream& out,  BigInt b) {
     out << b.m[b.l-1];
     for(int i = b.l-2; i >= 0; i--){
         out.width(5);
-        out.fill(0);
-        cout << "now = " << b.m[i] << endl;
+        out.fill('0');
         out << b.m[i];
     }
     return out;
 }
 BigInt BigInt::operator +(const BigInt &y) {
-    BigInt &x = *this;
+    BigInt x(*this);
     int i;
     long long h = 0;
+    //plus the two num together
     for(i = 0; i < x.l || i < y.l || h; i++){
-        h += y.m[i] * y.sign;
-        cout << "x = " << x.m[i] << endl;
-        cout << "y = " << y.m[i] << endl;
-        x.m[i] += h % max;
+        //if the digit is o, then we cannot access the num, represent as zero
+        h += (i < x.l) * x[i] * x.sign + (i < y.l) * y[i] * y.sign;
+        x[i] = h % max;
         h /= max;
     }
-
+    //the total digit
     x.l = i;
-    if(x.m[i-1] < 0){
+    //to check if the digit is nonzero
+    for(; x.l > 1 && !x[x.l-1]; x.l--);
+    //if the first num is negative, it is a negative num
+    if(x[x.l-1] < 0){
         x.sign = -1;
     }else x.sign = 1;
-
-    for(int j = 0; j < x.l; ++j){
-        x.m[j] *= x.sign;
-        cout << "x.m[j] = " << x.m[j] << endl;
-        x.m[j] -= h;
-        if(x.m[j] < 0){
-            x.m[j] += max;
-            h = 1;
+    if(x[x.l - 1] >= 0){
+        for(int j = 0; j < x.l; ++j){
+            if(x[j] < 0){
+                x[j+1]--;
+                x[j] += max;
+            }
         }
-        else h = 0;
+    }else{
+        for(int i = 0; i < x.l; ++i){
+            if(x[i] > 0){
+                x[i+1]++;
+                x[i] -= max;
+            }
+        }
     }
-
-    if(x.m[i-1] == 0) x.l--;
+    for(int i = 0; i < x.l; ++i){
+        x[i] *= x.sign;
+    }
+    for(; x.l > 1 && !x[x.l-1]; x.l--);
+    if(x.sign == -1 && x.l == 1 && x[0] == 0) x.sign = 1;
     return x;
 }
 
 BigInt BigInt::operator -( const BigInt &y ) {
-    BigInt &x = (*this);
+    BigInt x(*this);
     int i;
     long long h = 0;
+    //plus the two num together
     for(i = 0; i < x.l || i < y.l || h; i++){
-        h -= y.m[i] * y.sign;
-        x[i] += h % max;
+        //if the digit is o, then we cannot access the num, represent as zero
+        h += (i < x.l) * x[i] * x.sign - (i < y.l) * y[i] * y.sign;
+        x[i] = h % max;
         h /= max;
     }
+    //the total digit
     x.l = i;
-    for(int j = 0; j < x.l; ++j){
-        if(y.m[j] < 0){
-            x.m[j] += max;
-            x.m[j+1] -= 1;
+    //to check if the digit is nonzero
+    for(; x.l > 1 && !x[x.l-1]; x.l--);
+    //if the first num is negative, it is a negative num
+    if(x[x.l-1] < 0){
+        x.sign = -1;
+    }else x.sign = 1;
+    if(x[x.l - 1] >= 0){
+        for(int j = 0; j < x.l; ++j){
+            if(x[j] < 0){
+                x[j+1]--;
+                x[j] += max;
+            }
         }
-        else if(y.m[j] > max){
-            x.m[j] -= max;
-            x.m[j+1] += 1;
+    }else{
+        for(int i = 0; i < x.l; ++i){
+            if(x[i] > 0){
+                x[i+1]++;
+                x[i] -= max;
+            }
         }
     }
-    if(x.m[i-1] == 0)x.m[i-1]--;
-    else if(x.m[i] != 0) x.m[i-1]++;
+    for(int i = 0; i < x.l; ++i){
+        x[i] *= x.sign;
+    }
+    for(; x.l > 1 && !x[x.l-1]; x.l--);
+    if(x.sign == -1 && x.l == 1 && x[0] == 0) x.sign = 1;
     return x;
 }
 
