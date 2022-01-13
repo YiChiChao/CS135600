@@ -11,41 +11,35 @@ int main(){
         long long int m;
         cin >> n >> m;
         for(int i = 1; i <= n; ++i){
-            int tmp;
-            cin >> tmp;
-            coffee[i] = coffee[i-1] + tmp;
+            cin >> coffee[i];
+            //save the number of coffee as prefix sum
         }
-        int day = 1;
-        while(day <= n){
+        int ans = -1;
+        long long int L = 0, R = n+1;
+        while(L < R){
+            long long int day = (L+R)/2;
             long long int count = 0;
-            for(int i = 1, j = 0; i <= n; i += day, ++j){
-                if(i+day-1 <= n){
-                    long long int tmp;
-                    if((tmp = coffee[i+day-1] - coffee[i-1] - (j*day))>0){
-                        count += tmp;
-                        //cout << "coffee[i+day-1] = " << coffee[i+day-1] << " coffee[i-1] = " << coffee[i-1] << endl;
-                        //cout << "count = " << count << endl;
-                    }
-                    else break;
-                    
-                }
-                else{
-                    long long int tmp;
-                    if((tmp = coffee[n] - coffee[i-1] - (j*(n-i+1)))>0){
-                        count += tmp;
-                        //cout << "count = " << count << endl;
-                        break;
-                    }else break;
+            if(day == 0)break;
+            for(int i = 1; i <= day; ++i)count += coffee[i];
+            int cycle = 0, minus = 1;
+            for(int i = day+1; i <= n; ++i){
+                cycle++;
+                if(coffee[i] > minus) count += coffee[i]-minus;
+                if(cycle == day){
+                    cycle = 0;
+                    minus++;
                 }
             }
+            //cout << count << endl;
             if(count >= m){
-                cout << day << endl;
-                break;
+                ans = day;
+                R = day;
             }
-            else if(day == n)cout << "-1" << endl;
-            day++;
+            else L = day+1;
             //cout << "== " << day <<"==" << endl;
         }
+        cout << ans << endl;
+        //cout << endl;
         //cout << "-----------------------------------------------" << endl;
         memset(coffee, 0, sizeof(coffee));
     }
